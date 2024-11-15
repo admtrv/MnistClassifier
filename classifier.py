@@ -1,3 +1,5 @@
+# classifier.py
+
 import torch
 import torchvision.transforms as transforms
 from matplotlib import pyplot as plt
@@ -13,7 +15,7 @@ from config import train_batch_size, test_batch_size
 from config import second_layer_in, second_layer_out
 from config import epochs, sgd_learning_rate, sgd_momentum_learning_rate, adam_learning_rate, momentum
 
-# directory configuration
+# directory config
 output_dir = "temp"
 os.makedirs(output_dir, exist_ok=True)
 
