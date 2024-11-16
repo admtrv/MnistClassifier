@@ -1,22 +1,23 @@
 # classifier.py
 
-import torch
-import torchvision.transforms as transforms
-from matplotlib import pyplot as plt
-from sklearn.metrics import confusion_matrix
-from torch import nn, optim
-from torchvision import datasets
-from torch.utils.data import DataLoader
-import seaborn as sns
 import os
 import re
+import torch
+from torch import nn, optim
+from torch.utils.data import DataLoader
+from torchvision import datasets
+import torchvision.transforms as transforms
+from sklearn.metrics import confusion_matrix
+from matplotlib import pyplot as plt
+import seaborn as sns
 
+# config
 from config import train_batch_size, test_batch_size
 from config import second_layer_in, second_layer_out
 from config import epochs, sgd_learning_rate, sgd_momentum_learning_rate, adam_learning_rate, momentum
+from config import output_dir
 
-# directory config
-output_dir = "temp"
+# directory
 os.makedirs(output_dir, exist_ok=True)
 
 # dataset
@@ -45,8 +46,6 @@ class NeuralNet(nn.Module):
         x = torch.relu(self.fc2(x))     # second layer relu
         x = self.fc3(x)                 # third layer output
         return x
-
-model = NeuralNet()
 
 # loss function
 criterion = nn.CrossEntropyLoss()
@@ -97,6 +96,8 @@ def train_and_evaluate(optimizer, epochs=5):
 def plot_metrics(train_losses, test_losses, test_accuracies, title):
     epochs = range(1, len(train_losses) + 1)
     plt.figure(figsize=(14, 5))
+
+    # losses
     plt.subplot(1, 2, 1)
     plt.plot(epochs, train_losses, label="Train Loss")
     plt.plot(epochs, test_losses, label="Test Loss")
@@ -105,6 +106,7 @@ def plot_metrics(train_losses, test_losses, test_accuracies, title):
     plt.title(f"{title} Loss")
     plt.legend()
 
+    # accuracy
     plt.subplot(1, 2, 2)
     plt.plot(epochs, test_accuracies, label="Accuracy")
     plt.xlabel("Epochs")
@@ -112,7 +114,9 @@ def plot_metrics(train_losses, test_losses, test_accuracies, title):
     plt.title(f"{title} Accuracy")
     plt.legend()
 
-    plt.savefig(os.path.join(output_dir, re.sub(r'[^a-zA-Z0-9]', '', re.sub(r'\s+', '_', title)).lower() + "_metrics.png"))
+    filename = re.sub(r'[^a-zA-Z0-9_]', '', re.sub(r'\s+', '_', title)).lower() + "_metrics.png"
+    filename = re.sub(r'_+', '_', filename)
+    plt.savefig(os.path.join(output_dir, filename))
     plt.show()
 
 # confusion matrix graph
@@ -128,13 +132,16 @@ def plot_confusion_matrix(title):
             y_pred.extend(predicted.tolist())
 
     cm = confusion_matrix(y_true, y_pred)
+
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=range(10), yticklabels=range(10))
     plt.xlabel("Predicted Number")
     plt.ylabel("Real Number")
     plt.title("Confusion Matrix")
 
-    plt.savefig(os.path.join(output_dir, re.sub(r'[^a-zA-Z0-9]', '', re.sub(r'\s+', '_', title)).lower() + "_confusion_matrix.png"))
+    filename = re.sub(r'[^a-zA-Z0-9_]', '', re.sub(r'\s+', '_', title)).lower() + "_confusion_matrix.png"
+    filename = re.sub(r'_+', '_', filename)
+    plt.savefig(os.path.join(output_dir, filename))
     plt.show()
 
 if __name__ == "__main__":

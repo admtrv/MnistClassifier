@@ -9,10 +9,13 @@ second_layer_in = 128
 second_layer_out = 64
 
 # training config
-epochs = 20
+epochs = 1
 
 sgd_learning_rate = 0.01
 sgd_momentum_learning_rate = 0.01
 adam_learning_rate = 0.001
 
 momentum = 0.8
+
+# directory config
+output_dir = "temp"
