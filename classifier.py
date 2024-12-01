@@ -121,17 +121,17 @@ def plot_metrics(train_losses, test_losses, test_accuracies, title):
 
 # confusion matrix graph
 def plot_confusion_matrix(title):
-    y_true = []
-    y_pred = []
+    true_values = []
+    predicted_values = []
     model.eval()
     with torch.no_grad():
         for images, labels in test_loader:
             outputs = model(images)
             _, predicted = torch.max(outputs.data, 1)
-            y_true.extend(labels.tolist())
-            y_pred.extend(predicted.tolist())
+            true_values.extend(labels.tolist())
+            predicted_values.extend(predicted.tolist())
 
-    cm = confusion_matrix(y_true, y_pred)
+    cm = confusion_matrix(true_values, predicted_values)
 
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=range(10), yticklabels=range(10))

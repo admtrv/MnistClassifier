@@ -9,7 +9,7 @@ second_layer_in = 128
 second_layer_out = 64
 
 # training config
-epochs = 1
+epochs = 25
 
 sgd_learning_rate = 0.01
 sgd_momentum_learning_rate = 0.01
